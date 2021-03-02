@@ -22,6 +22,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.data:spring-data-keyvalue")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation ("org.springframework.security:spring-security-oauth2-resource-server")
+    implementation ("org.springframework.security:spring-security-oauth2-jose")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
