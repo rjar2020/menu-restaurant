@@ -1,56 +1,51 @@
 package com.example.menu.item;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.FieldError
+import org.springframework.validation.ObjectError
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.util.*
-import javax.validation.Valid
-import org.springframework.validation.FieldError
-
-import java.util.HashMap
-
-import org.springframework.validation.ObjectError
-
-import org.springframework.web.bind.MethodArgumentNotValidException
 import java.util.function.Consumer
+import javax.validation.Valid
 
 const val ITEM_CONTROLLER_ROOT = "api/menu/items"
 
-@CrossOrigin(origins = ["https://dashboard.whatabyte.app"])
 @RestController
 @RequestMapping(ITEM_CONTROLLER_ROOT)
 class ItemController(private val service: ItemService) {
 
     @GetMapping
     fun findAll(): ResponseEntity<List<Item>> =
-        ResponseEntity.ok().body(service.findAll())
+            ResponseEntity.ok().body(service.findAll())
 
     @GetMapping("/{id}")
     fun find(@PathVariable("id") id: Long): ResponseEntity<Item> =
-        ResponseEntity.of(Optional.ofNullable(service.find(id)))
+            ResponseEntity.of(Optional.ofNullable(service.find(id)))
 
     @PostMapping
     fun create(@Valid @RequestBody item: Item): ResponseEntity<Item> {
         val created = service.create(item)
         val location: URI = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(created.id)
-            .toUri()
+                .path("/{id}")
+                .buildAndExpand(created.id)
+                .toUri()
         return ResponseEntity.created(location).body(created)
     }
 
     @PutMapping("/{id}")
     fun update(
-        @PathVariable("id") id: Long,
-        @Valid @RequestBody updatedItem: Item
+            @PathVariable("id") id: Long,
+            @Valid @RequestBody updatedItem: Item
     ): ResponseEntity<Item> = when (val updated = service.update(id, updatedItem)) {
         null -> {
             val created = service.create(updatedItem)
             val location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(created.id)
-                .toUri()
+                    .path("/{id}")
+                    .buildAndExpand(created.id)
+                    .toUri()
             ResponseEntity.created(location).body(created)
         }
         else -> ResponseEntity.ok().body(updated)
