@@ -14,8 +14,8 @@ internal class AudienceValidator(private var audience: String) : OAuth2TokenVali
     }
 
     override fun validate(jwt: Jwt): OAuth2TokenValidatorResult =
-        when (jwt.audience.contains(audience)) {
-            true -> OAuth2TokenValidatorResult.success()
-            false -> OAuth2TokenValidatorResult.failure(OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN))
-        }
+            when (jwt.audience.contains(audience)) {
+                true -> OAuth2TokenValidatorResult.success()
+                false -> OAuth2TokenValidatorResult.failure(OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN))
+            }
 }
