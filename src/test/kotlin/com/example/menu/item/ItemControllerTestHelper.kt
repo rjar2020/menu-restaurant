@@ -18,6 +18,11 @@ import java.time.Duration
 
 internal const val ABSOLUTE_ITEM_CONTROLLER_ROOT = "/$ITEM_CONTROLLER_ROOT"
 internal val OBJECT_MAPPER = jacksonObjectMapper()
+internal const val IDS_CREDENTIALS =
+        "{\"client_id\":\"YdltwoNva3WilLBHM2mM8FHy1vHk1K35\"," +
+                "\"client_secret\":\"GTfNf7z453EnuGROkeZsbyNT21VsjD58GZEWWgSq4gZqhREztQpqGVfFXJOPS4bP\"," +
+                "\"audience\":\"https://menu-api.example.com\"," +
+                "\"grant_type\":\"client_credentials\"}"
 
 internal fun TestRestTemplate.postItem(newItem: Item) =
         this.postForEntity(
@@ -68,7 +73,7 @@ internal fun getAuthHeaders(): HttpHeaders {
                     .uri(URI.create("https://dev-9hiw86-v.eu.auth0.com/oauth/token"))
                     .timeout(Duration.ofSeconds(3))
                     .header("content-type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"client_id\":\"YdltwoNva3WilLBHM2mM8FHy1vHk1K35\",\"client_secret\":\"GTfNf7z453EnuGROkeZsbyNT21VsjD58GZEWWgSq4gZqhREztQpqGVfFXJOPS4bP\",\"audience\":\"https://menu-api.example.com\",\"grant_type\":\"client_credentials\"}"))
+                    .POST(HttpRequest.BodyPublishers.ofString(IDS_CREDENTIALS))
                     .build(), HttpResponse.BodyHandlers.ofString()
     )
     val token = OBJECT_MAPPER.readValue(response.body(), AccessToken::class.java)
