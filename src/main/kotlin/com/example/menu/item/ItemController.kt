@@ -1,6 +1,7 @@
-package com.example.menu.item;
+package com.example.menu.item
 
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -26,6 +27,7 @@ class ItemController(private val service: ItemService) {
             ResponseEntity.of(Optional.ofNullable(service.find(id)))
 
     @PostMapping
+    @PreAuthorize("hasAuthority('create:items')")
     fun create(@Valid @RequestBody item: Item): ResponseEntity<Item> {
         val created = service.create(item)
         val location: URI = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -36,6 +38,7 @@ class ItemController(private val service: ItemService) {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('update:items')")
     fun update(
             @PathVariable("id") id: Long,
             @Valid @RequestBody updatedItem: Item
@@ -52,6 +55,7 @@ class ItemController(private val service: ItemService) {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('delete:items')")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Item> {
         service.delete(id)
         return ResponseEntity.noContent().build()
